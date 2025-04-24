@@ -9,7 +9,6 @@ from PIL import Image
 path = 'goes_images_northeast/ABI-L1b-RadM/'
 
 
-
 def gen_image(path):
     print("Path:" + path)
     c01_file = ''
@@ -29,9 +28,9 @@ def gen_image(path):
         print(c02_file)
         print(c03_file)
         print("Error at" + path)
-        return  None
+        return None
     # Red Band
-    print('Co2'+c02_file)
+    print('Co2' + c02_file)
     g16nc = Dataset(c02_file, 'r')
     radiance = g16nc.variables['Rad'][:]
     g16nc.close()
@@ -91,16 +90,39 @@ def gen_image(path):
     return truecolor
 
 
-for year in range(2017, 2026):
-    for day in range(1, 366):
-        formatted_day = str(day).zfill(3)
-        local_folder = os.path.join("pre_crop/ABI-L1b-RadM/", str(year), formatted_day, "12/")
-        os.makedirs(local_folder, exist_ok=True)
-        truecolor = gen_image(path + str(year) + "/" + formatted_day + "/12/")
-        if not truecolor is None:
-            print("Making image")
-            image = Image.fromarray((truecolor * 255).astype(np.uint8), 'RGB')
-            print(("pre_crop/ABI-L1b-RadM/" + str(year) + "/" + formatted_day + "/12/" + "truecolor" + str(
+def gen_images():
+    for year in range(2017, 2026):
+        for day in range(1, 366):
+            formatted_day = str(day).zfill(3)
+            local_folder = os.path.join("pre_crop/ABI-L1b-RadM/", str(year), formatted_day, "12/")
+            os.makedirs(local_folder, exist_ok=True)
+            truecolor = gen_image(path + str(year) + "/" + formatted_day + "/12/")
+            if not truecolor is None:
+                print("Making image")
+                image = Image.fromarray((truecolor * 255).astype(np.uint8), 'RGB')
+                print(("pre_crop/ABI-L1b-RadM/" + str(year) + "/" + formatted_day + "/12/" + "truecolor" + str(
+                    year) + formatted_day + ".png"))
+                image.save(("pre_crop/ABI-L1b-RadM/" + str(year) + "/" + formatted_day + "/12/" + "truecolor" + str(
+                    year) + formatted_day + ".png"))
+
+
+def crop_images():
+    crop_box = (562, 126, 1000, 322)
+    for year in range(2017, 2026):
+        for day in range(1, 366):
+            formatted_day = str(day).zfill(3)
+            local_folder = os.path.join("post_crop/ABI-L1b-RadM/", str(year), formatted_day, "12/")
+            os.makedirs(local_folder, exist_ok=True)
+            if not os.path.isfile(("pre_crop/ABI-L1b-RadM/" + str(year) + "/" + formatted_day + "/12/" + "truecolor" + str(
+                    year) + formatted_day + ".png")):
+                print(("pre_crop/ABI-L1b-RadM/" + str(year) + "/" + formatted_day + "/12/" + "truecolor" + str(
+                    year) + formatted_day + ".png"))
+                continue
+            img = Image.open(("pre_crop/ABI-L1b-RadM/" + str(year) + "/" + formatted_day + "/12/" + "truecolor" + str(
                 year) + formatted_day + ".png"))
-            image.save(("pre_crop/ABI-L1b-RadM/" + str(year) + "/" + formatted_day + "/12/" + "truecolor" + str(
+            cropped_img = img.crop(crop_box)
+            cropped_img.save(("post_crop/ABI-L1b-RadM/" + str(year) + "/" + formatted_day + "/12/" + "truecolor" + str(
                 year) + formatted_day + ".png"))
+
+
+crop_images()

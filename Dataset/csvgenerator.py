@@ -6,10 +6,6 @@ import numpy as np
 
 
 
-# File location
-df = pd.read_csv('/content/drive/My Drive/CS541/finalProject/3997445.csv')
-
-
 def extract_weather_data(csv_path, output_path='weather_data.npy'):
     # Load CSV
     df = pd.read_csv(csv_path)
@@ -31,5 +27,5 @@ def extract_weather_data(csv_path, output_path='weather_data.npy'):
 
 
 # CALL NEW FUNCTION
-extract_weather_data('/content/drive/My Drive/CS541/finalProject/3997445.csv')
+extract_weather_data('3997445.csv')
 

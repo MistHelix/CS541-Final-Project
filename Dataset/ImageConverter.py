@@ -107,7 +107,7 @@ def gen_images():
 
 
 def crop_images():
-    crop_box = (562, 126, 1000, 322)
+    crop_box = (669, 148, 797, 277)
     for year in range(2017, 2026):
         for day in range(1, 366):
             formatted_day = str(day).zfill(3)

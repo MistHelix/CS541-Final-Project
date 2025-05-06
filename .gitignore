@@ -172,9 +172,10 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
-
+*.0
 *.nc
 *.png
+*.npy
 /.idea/misc.xml
 /.idea/modules.xml
 /.idea/inspectionProfiles/profiles_settings.xml
